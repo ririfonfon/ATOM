@@ -10,15 +10,14 @@ int resolution = 16;
 int ledChannela = 4;
 int ledChannelb = 5;
 int ledChannelc = 6;
-int ledPina = 22;
-int ledPinb = 19;
+int ledPina = 19;
+int ledPinb = 22;
 int ledPinc = 23;
-uint8_t ledArray[3] = {1, 2, 3}; // three led channels
 const boolean invert = false;    // set true if common anode, false if common cathode
 
-float r = 150;
-float v = 150;
-float b = 255;
+float r = 250;
+float v = 250;
+float b = 250;
 
 int led_r = 255;
 int led_v = 255;
@@ -26,71 +25,6 @@ int led_b = 255;
 
 ///////////////////////////////////////Btn setting/////////////////////////////////////////
 uint8_t FSM = 0;
-
-void setup()
-{
-  M5.begin(true, false, true);
-  delay(50);
-
-  pwm_init();
-  pwm_show();
-}
-
-void loop()
-{
-  if (M5.Btn.wasPressed())
-  {
-
-    switch (FSM)
-    {
-    case 0:
-      r = 255;
-      v = 0;
-      b = 0;
-      break;
-    case 1:
-      r = 0;
-      v = 255;
-      b = 0;
-      break;
-    case 2:
-      r = 0;
-      v = 0;
-      b = 255;
-      break;
-    case 3:
-      r = 255;
-      v = 255;
-      b = 0;
-      break;
-    case 4:
-      r = 255;
-      v = 0;
-      b = 255;
-      break;
-    case 5:
-      r = 0;
-      v = 255;
-      b = 255;
-      break;
-    case 6:
-      r = 255;
-      v = 255;
-      b = 255;
-      break;
-
-    }
-
-    FSM++;
-    if (FSM >= 7)
-    {
-      FSM = 0;
-    }
-  }
-  pwm_show();
-  delay(50);
-  M5.update();
-}
 
 void pwm_init()
 {
@@ -112,3 +46,80 @@ void pwm_show()
   ledcWrite(ledChannelb, led_v);
   ledcWrite(ledChannelc, led_b);
 } //leds_show
+
+void setup()
+{
+  M5.begin(true, false, true);
+  delay(50);
+
+  pwm_init();
+  pwm_show();
+}
+
+void loop()
+{
+  if (M5.Btn.wasPressed())
+  {
+
+    switch (FSM)
+    {
+    case 0:
+      r = 0;
+      v = 255;
+      b = 255;
+      M5.dis.drawpix(0, 0xf00000);
+      break;
+    case 1:
+      r = 255;
+      v = 0;
+      b = 255;
+      M5.dis.drawpix(0, 0x00f000);
+      break;
+    case 2:
+      r = 255;
+      v = 255;
+      b = 0;
+      M5.dis.drawpix(0, 0x0000f0);
+      break;
+    case 3:
+      r = 0;
+      v = 0;
+      b = 255;
+      M5.dis.drawpix(0, 0xf0f000);
+      break;
+    case 4:
+      r = 0;
+      v = 255;
+      b = 0;
+      M5.dis.drawpix(0, 0xf000f0);
+      break;
+    case 5:
+      r = 255;
+      v = 0;
+      b = 0;
+      M5.dis.drawpix(0, 0x00f0f0);
+      break;
+    case 6:
+      r = 0;
+      v = 150;
+      b = 0;
+      M5.dis.drawpix(0, 0xf0f0f0);
+      break;
+    case 7:
+      r = 255;
+      v = 255;
+      b = 255;
+      M5.dis.drawpix(0, 0x000000);
+      break;
+    }
+
+    FSM++;
+    if (FSM >= 8)
+    {
+      FSM = 0;
+    }
+  }
+  pwm_show();
+  delay(50);
+  M5.update();
+}
