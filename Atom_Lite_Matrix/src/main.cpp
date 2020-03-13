@@ -6,7 +6,8 @@
 
 extern const unsigned char AtomImageData[375 + 2];
 extern const unsigned char image_Komplex[1307];
-extern const unsigned char image_carre[1202];
+extern const unsigned char image_carre_2[1325];
+extern const unsigned char image_coeur[77];
 
 float accX = 0, accY = 0, accZ = 0;
 float gyroX = 0, gyroY = 0, gyroZ = 0;
@@ -14,6 +15,7 @@ int posX = 12, posY = 12, posZ = 0;
 float temp = 0;
 bool IMU6886Flag = false;
 uint8_t FSM = 0;
+uint8_t brig = 255;
 
 void setup()
 {
@@ -34,9 +36,11 @@ void loop()
       switch (FSM)
       {
       case 0:
+        brig = 20;
         M5.dis.animation((uint8_t *)AtomImageData, 100, LED_Display::kMoveLeft, 2500);
         break;
       case 1:
+        brig = 40;
         M5.dis.animation((uint8_t *)image_Komplex, 100, LED_Display::kMoveLeft, 2500);
         break;
       case 2:
@@ -58,19 +62,18 @@ void loop()
         break;
       }
       FSM++;
-      if (FSM >= 3)
+      if (FSM >= 5)
       {
         FSM = 0;
       }
     }
   }
   delay(50);
-  if (FSM == 2)
+  if (FSM == 3)
   {
     if (IMU6886Flag == true)
     {
       M5.IMU.getGyroData(&gyroX, &gyroY, &gyroZ);
-      // Serial.printf("%.2f,%.2f,%.2f o/s \r\n", gyroX, gyroY, gyroZ);
       if (gyroY < -6)
         posX = posX - 1;
       if (gyroY > 6)
@@ -80,8 +83,18 @@ void loop()
       if (gyroX > 6)
         posY = posY + 1;
     }
-    M5.dis.displaybuff((uint8_t *)image_carre, posX, posY);
+    brig = 255;
+    M5.dis.displaybuff((uint8_t *)image_carre_2, posX, posY);
   }
 
+  if (FSM == 4)
+  {
+    brig = brig + 25;
+    if (brig >= 256)
+      brig = 0;
+    M5.dis.animation((uint8_t *)image_coeur, 100, LED_Display::kStatic, 1);
+  }
+
+  M5.dis.setBrightness(brig);
   M5.update();
 }
