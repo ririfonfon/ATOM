@@ -141,7 +141,7 @@ void setup()
 {
     M5.begin(true, false, true);
     delay(50);
-    String myMsg = "AB 192.168.0.1  ";
+    String myMsg = "A 192.168.0.1  ";
     //192.168.0.1
     int msgLen = myMsg.length();
     int screenW = msgLen * charW;
