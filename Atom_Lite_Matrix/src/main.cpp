@@ -251,7 +251,8 @@ void setup()
 {
     M5.begin(true, false, true);
     delay(50);
-    String myMsg = "ALORS CA MARCHE OU BIEN   ";
+    // String myMsg = "ALORS CA MARCHE OU BIEN   ";
+    String myMsg = "A ";
     //192.168.0.1
     int msgLen = myMsg.length();
     int screenW = msgLen * charW;
@@ -262,28 +263,28 @@ void setup()
     aData[0] = screenW;
     aData[1] = charH;
 
-    for (int line = 0; line < 5; line++)
-    {
-        int lOffset = (line * msgLen) * colors * charW; // 3 colors, 4 pixels wide
+    // for (int line = 0; line < 5; line++)
+    // {
+    //     int lOffset = (line * msgLen) * colors * charW; // 3 colors, 4 pixels wide
 
-        for (int i = 0; i < myMsg.length(); i++)
-        {
-            int i2 = cChars.indexOf(myMsg.charAt(i)); // Offset in cMatrix[i2]
-            i2 = (i2 == -1) ? 12 : i2;                // Space for unknown chars
+    //     for (int i = 0; i < myMsg.length(); i++)
+    //     {
+    //         int i2 = cChars.indexOf(myMsg.charAt(i)); // Offset in cMatrix[i2]
+    //         i2 = (i2 == -1) ? 12 : i2;                // Space for unknown chars
 
-            //   Serial.println("Char:" + String(myMsg.charAt(i)) + " loffset=" + String(lOffset) + " line=" + String(line) + " i2=" + String(i2));
+    //         //   Serial.println("Char:" + String(myMsg.charAt(i)) + " loffset=" + String(lOffset) + " line=" + String(line) + " i2=" + String(i2));
 
-            for (int p = 0; p < charW * colors; p++)
-            {
-                int p2 = (i * charW * colors) + p; // Position in target array
-                int px = cMatrix[i2][p + (line * colors * charW)];
+    //         for (int p = 0; p < charW * colors; p++)
+    //         {
+    //             int p2 = (i * charW * colors) + p; // Position in target array
+    //             int px = cMatrix[i2][p + (line * colors * charW)];
 
-                //   Serial.println("We will set aData[" + String(p2+lOffset+2) + "] to cMatrix[" + String(i2) + "][" + String(p+(line*colors*charW)) + "] = " + String(px));
-                // aData[p2 + lOffset + 2] = px;
-                aData[p2 + lOffset + 5] = px;
-            }
-        }
-    }
+    //             //   Serial.println("We will set aData[" + String(p2+lOffset+2) + "] to cMatrix[" + String(i2) + "][" + String(p+(line*colors*charW)) + "] = " + String(px));
+    //             // aData[p2 + lOffset + 2] = px;
+    //             aData[p2 + lOffset + 5] = px;
+    //         }
+    //     }
+    // }
 
     M5.dis.setBrightness(20);
     M5.dis.animation((uint8_t *)aData, 500, LED_Display::kMoveLeft, screenW - 5);
