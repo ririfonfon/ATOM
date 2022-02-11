@@ -151,7 +151,7 @@ void setup()
   Serial.print(", start dmx input");
   // REARM RX2 (using gpio15)
   pinMode(DMX_SERIAL_INPUT_PIN, INPUT);
-  delay(400);
+  delay(100);
   ESP32DMX.startInput(DMX_SERIAL_INPUT_PIN);
 
   Serial.println(", setup complete.");
