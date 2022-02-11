@@ -40,7 +40,7 @@ uint8_t test_levelB = 0;
 uint8_t test_levelC = 0;
 
 // pins for PWM output
-uint8_t led_pinA = 35;
+uint8_t led_pinA = 26;
 uint8_t led_pinB = 33;
 uint8_t led_pinC = 25;
 
@@ -114,14 +114,14 @@ void receiveCallback(int slots)
 
 void test_led()
 {
-  gammaCorrectedWrite(led_channelA, 100);
-  delay(2500);
-  gammaCorrectedWrite(led_channelB, 100);
+  gammaCorrectedWrite(led_channelA, 255);
+  delay(500);
+  gammaCorrectedWrite(led_channelB, 255);
   gammaCorrectedWrite(led_channelA, 0);
-  delay(2500);
-  gammaCorrectedWrite(led_channelC, 100);
+  delay(500);
+  gammaCorrectedWrite(led_channelC, 255);
   gammaCorrectedWrite(led_channelB, 0);
-  delay(2500);
+  delay(500);
   gammaCorrectedWrite(led_channelC, 0);
 }
 /************************************************************************
@@ -132,6 +132,12 @@ void setup()
   Serial.begin(115200);
   Serial.print("setup");
 
+  setupPWMChannel(led_pinA, led_channelA);
+  setupPWMChannel(led_pinB, led_channelB);
+  setupPWMChannel(led_pinC, led_channelC);
+  test_led();
+  Serial.print(", test led ok");
+
   // DISARM RX2 (using gpio15)
   pinMode(DMX_SERIAL_INPUT_PIN, OUTPUT);
   digitalWrite(DMX_SERIAL_INPUT_PIN, LOW);
@@ -139,20 +145,14 @@ void setup()
 
   ESP32DMX.setDirectionPin(DMX_DIRECTION_PIN);
 
-  setupPWMChannel(led_pinA, led_channelA);
-  setupPWMChannel(led_pinB, led_channelB);
-  setupPWMChannel(led_pinC, led_channelC);
-
   Serial.print(", set callback");
   ESP32DMX.setDataReceivedCallback(receiveCallback);
 
   Serial.print(", start dmx input");
   // REARM RX2 (using gpio15)
   pinMode(DMX_SERIAL_INPUT_PIN, INPUT);
-  delay(200);
+  delay(400);
   ESP32DMX.startInput(DMX_SERIAL_INPUT_PIN);
-  // test_led();
-
 
   Serial.println(", setup complete.");
 }
